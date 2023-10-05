@@ -1,0 +1,210 @@
+$black: #000000
+$white: #FFFFFF
+
+$color-primary: #0079F7
+$color-secondary: #57D8FF
+
+$color-dark-bg: #21232B
+$color-light-bg: #FFFFFF
+
+$color-dark-text: #FFFFFF
+$color-light-text: #000000
+
+$color-dark-hambd: #666666
+$color-light-hambd: #DEEBEF
+
+$color-dark-teambg: rgba(81, 95, 100, 0.18)
+$color-light-teambg: #DEEBEF
+
+$color-dark-loading: #20222c
+$color-light-loading: #f9f9f9
+
+$color-dark-ring: rgba(81, 95, 100, 0.18)
+$color-light-ring: rgba(87, 216, 255, 0.18)
+
+$color-dark-dvd: #666666
+$color-light-dvd: #DEEBEF
+
+$color-dark-menuovf: rgba(42, 45, 54, 0.75)
+$color-light-menuovf: rgba(255, 255, 255, 0.6)
+
+$color-placeholder: #8DC8FF
+
+$line-height-primary-mult: 1.5
+$line-height-secondary-mult: 1.15
+
+$font-primary: 'Poppins', sans-serif
+$font-secondary: 'Snippet', sans-serif
+
+
+$colors-basic: ("white": $white, "black": $black, "primary": $color-primary, "secondary": $color-secondary)
+$font-weights: ("light": 300, "regular": 400, "medium": 500, "semibold": 600, "bold": 700, "extra": 800, "black": 900)
+
+$font-sizes: ("xsm": 16, "sm-1": 20, "sm-2": 24, "md": 30, "md-2": 36, "lg-1": 40, "lg-2": 48, "lg-3": 64, "xlg-1": 70, "xlg-2": 75)
+$font-sizes-md: ("xsm": 14, "sm-1": 16, "sm-2": 20, "md": 25, "md-2": 30, "lg-1": 35, "lg-2": 42, "lg-3": 52, "xlg-1": 56, "xlg-2": 60)
+$font-sizes-sm: ("xsm": 14, "sm-1": 16, "sm-2": 20, "md": 25, "md-2": 28, "lg-1": 32, "lg-2": 36, "lg-3": 40, "xlg-1": 45, "xlg-2": 48)
+$font-sizes-xs: ("xsm": 12, "sm-1": 14, "sm-2": 18, "md": 20, "md-2": 22, "lg-1": 24, "lg-2": 30, "lg-3": 30, "xlg-1": 32, "xlg-2": 48)
+
+$text-aligns: left, right, center, justify
+$text-transforms: uppercase, lowercase, capitalize
+$letter-spacings: 5, 33, 60
+$line-heights: 30, 35
+$text-display: inline, inline-block, block
+
+$breakpoints: ('xs': 640px, 'sm': 1024px, 'md': 1200px, 'lg': 1600px) !default
+$media-expressions: ('screen': 'screen', 'print': 'print', 'handheld': 'handheld', 'retina2x': ('(-webkit-min-device-pixel-ratio: 2)', '(min-resolution: 192dpi)'), 'retina3x': ('(-webkit-min-device-pixel-ratio: 3)', '(min-resolution: 350dpi)')) !default
+$unit-intervals: ('px': 1, 'em': 0.01, 'rem': 0.1) !default
+
+@mixin media($conditions...)
+    @for $i from 1 through length($conditions)
+        $conditions: set-nth($conditions, $i, parse-expression(nth($conditions, $i)))
+
+    $branches: get-query-branches($conditions)
+    $query: ''
+
+    @each $branch in $branches
+        @if (str-length($query) != 0)
+            $query: $query + ', '
+
+        $query: $query + $branch
+
+    @media #{$query}
+        @content
+
+@function get-query-branches($expressions)
+    $result: ''
+    $has-groups: false
+
+    @each $expression in $expressions
+        @if (str-length($result) != 0)
+            $result: $result + ' and '
+
+        @if (type-of($expression) == 'string')
+            $result: $result + $expression
+        @else if (type-of($expression) == 'list')
+            $result: $result + nth($expression, 1)
+            $has-groups: true
+        @else
+            @warn '#{$expression} is not a valid expression.'
+
+    @if $has-groups
+        @each $expression in $expressions
+            @if (type-of($expression) == 'list')
+                $first: nth($expression, 1)
+
+                @each $member in $expression
+                    @if ($member != $first)
+                        @each $partial in $result
+                            $result: join($result, str-replace-first($first, $member, $partial))
+
+    @return $result
+
+@function parse-expression($expression)
+    $operator: ''
+    $value: ''
+    $element: ''
+    $result: ''
+    $is-width: true
+
+    @if (type-of($expression) != 'string')
+        @warn 'Expression with type `#{type-of($expression)}` detected, string expected.'
+
+    @if (str-slice($expression, 2, 2) == '=')
+        $operator: str-slice($expression, 1, 2)
+        $value: str-slice($expression, 3)
+    @else
+        $operator: str-slice($expression, 1, 1)
+        $value: str-slice($expression, 2)
+
+    @if map-has-key($breakpoints, $value)
+        $result: map-get($breakpoints, $value)
+    @else if map-has-key($media-expressions, $expression)
+        $result: map-get($media-expressions, $expression)
+        $is-width: false
+    @else
+        $result: to-number($value)
+
+
+    @if ($is-width)
+        $unit: unit($result)
+        $interval: 0
+
+        @if (map-has-key($unit-intervals, $unit))
+            $interval: map-get($unit-intervals, $unit)
+        @else
+            @warn 'Unknown unit: #{$unit}'
+
+        @if ($operator == '>')
+            $element: '(min-width: #{$result + $interval})'
+        @else if ($operator == '<')
+            $element: '(max-width: #{$result - $interval})'
+        @else if ($operator == '>=')
+            $element: '(min-width: #{$result})'
+        @else if ($operator == '<=')
+            $element: '(max-width: #{$result})'
+        @else
+            @warn '#{$expression} is missing an operator.'
+    @else
+        $element: $result
+
+    @return $element
+
+@function str-replace-first($search, $replace, $subject)
+    $search-start: str-index($subject, $search)
+
+    @if $search-start == null
+        @return $subject
+
+    $result: str-slice($subject, 0, $search-start - 1)
+    $result: $result + $replace
+    $result: $result + str-slice($subject, $search-start + str-length($search))
+
+    @return $result
+
+@function to-number($string)
+
+    $strings: '0' '1' '2' '3' '4' '5' '6' '7' '8' '9'
+    $numbers:  0   1   2   3   4   5   6   7   8   9
+
+    $result: 0
+    $divider: 0
+    $minus: false
+
+    @for $i from 1 through str-length($string)
+        $character: str-slice($string, $i, $i)
+        $index: index($strings, $character)
+
+        @if $character == '-'
+            $minus: true
+
+        @else if $character == '.'
+            $divider: 1
+
+        @else
+            @if type-of($index) != 'number'
+                $result: if($minus, $result * -1, $result)
+                @return _length($result, str-slice($string, $i))
+
+            $number: nth($numbers, $index)
+
+            @if $divider == 0
+                $result: $result * 10
+
+            @else
+                $divider: $divider * 10
+                $number: $number / $divider
+
+            $result: $result + $number
+
+    @return if($minus, $result * -1, $result)
+
+@function _length($number, $unit)
+    $strings: 'px' 'cm' 'mm' '%' 'ch' 'pica' 'in' 'em' 'rem' 'pt' 'pc' 'ex' 'vw' 'vh' 'vmin' 'vmax'
+    $units:   1px  1cm  1mm  1%  1ch  1pica  1in  1em  1rem  1pt  1pc  1ex  1vw  1vh  1vmin  1vmax
+    $index: index($strings, $unit)
+
+    @if type-of($index) != 'number'
+        @warn 'Unknown unit `#{$unit}`.'
+        @return false
+
+    @return $number * nth($units, $index)

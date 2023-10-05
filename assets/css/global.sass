@@ -1,0 +1,431 @@
+@use './var'
+
+*
+    list-style: none
+    margin: 0
+    padding: 0
+    border: 0
+    outline: 0
+    text-decoration: none
+    background: none
+    -webkit-box-sizing: border-box
+    -moz-box-sizing: border-box
+    box-sizing: border-box
+    -webkit-user-select: none
+    -moz-user-select: none
+    -ms-user-select: none
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004)
+    text-rendering: optimizeLegibility !important
+    -webkit-font-smoothing: antialiased !important
+    -moz-osx-font-smoothing: antialiased !important
+    -webkit-appearance: none
+    -moz-appearance: none
+    appearance: none
+    font-family: var.$font-primary
+
+::-webkit-scrollbar
+    width: 4px
+    height: 4px
+
+::-webkit-scrollbar-thumb
+    border-radius: 4px
+    background-color: var.$color-secondary
+
+html
+    overflow-x: hidden
+
+body
+    padding-top: 152px
+    overflow-x: hidden
+    scroll-behavior: smooth
+    font-family: var.$font-primary
+
+    @include var.media('screen', '<=xs')
+        padding-top: 60px
+
+@include var.media('screen', '>xs')            
+    body[data-layout="default"]
+        cursor: none !important
+
+        *
+            cursor: none !important
+
+del
+    text-decoration: line-through
+
+strong, em, span, small
+    color: inherit
+    font-size: inherit
+    font-weight: inherit
+
+em
+    font-style: italic
+
+::placeholder
+    color: var.$color-placeholder
+    opacity: 1
+
+:-ms-input-placeholder
+    color: var.$color-placeholder
+
+::-ms-input-placeholder
+    color: var.$color-placeholder
+
+@each $align in var.$text-aligns
+    .ta-#{$align}
+        text-align: $align
+
+@each $transform in var.$text-transforms
+    .tt-#{$transform}
+        text-transform: $transform
+
+@each $name, $size in var.$font-sizes
+    .fs-#{$name}
+        font-size: ($size)+px
+        line-height: ($size * var.$line-height-primary-mult)+px
+
+@each $name, $weight in var.$font-weights
+    .fw-#{$name}
+        font-weight: $weight
+
+@each $tdisplay in var.$text-display
+    .td-#{$tdisplay}
+        display: $tdisplay
+
+.ff-primary
+    font-family: var.$font-primary
+
+.ff-secondary
+    font-family: var.$font-secondary
+
+    @each $name, $size in var.$font-sizes
+        &.fs-#{$name}
+            line-height: ($size * var.$line-height-secondary-mult)+px
+
+@each $letspace in var.$letter-spacings
+    .lts-#{$letspace}
+        letter-spacing: calc($letspace / 100)+em 
+
+@each $lineh in var.$line-heights
+    .lh-#{$lineh}
+        line-height: ($lineh)+px
+
+@include var.media('screen', '<=md')
+    @each $name, $size in var.$font-sizes-md
+        .fs-#{$name}
+            font-size: ($size)+px
+            line-height: ($size * var.$line-height-primary-mult)+px
+
+    @each $align in var.$text-aligns
+        .ta-#{$align}-md-down
+            text-align: $align
+
+    @each $lineh in var.$line-heights
+        .lh-#{$lineh}
+            line-height: ($lineh - 5)+px
+
+    .ff-secondary
+        @each $name, $size in var.$font-sizes-md
+            &.fs-#{$name}
+                line-height: ($size * var.$line-height-secondary-mult)+px
+
+@include var.media('screen', '<=sm')
+    @each $name, $size in var.$font-sizes-sm
+        .fs-#{$name}
+            font-size: ($size)+px
+            line-height: ($size * var.$line-height-primary-mult)+px
+
+    @each $align in var.$text-aligns
+        .ta-#{$align}-sm-down
+            text-align: $align
+
+    .ff-secondary
+        @each $name, $size in var.$font-sizes-sm
+            &.fs-#{$name}
+                line-height: ($size * var.$line-height-secondary-mult)+px
+
+@include var.media('screen', '<=xs')
+    @each $name, $size in var.$font-sizes-xs
+        .fs-#{$name}
+            font-size: ($size)+px
+            line-height: ($size * var.$line-height-primary-mult)+px
+
+    @each $align in var.$text-aligns
+        .ta-#{$align}-xs-down
+            text-align: $align
+
+    .ff-secondary
+        @each $name, $size in var.$font-sizes-xs
+            &.fs-#{$name}
+                line-height: ($size * var.$line-height-secondary-mult)+px
+
+body[data-theme="light"]
+    background-color: var.$color-light-bg
+
+    ::-webkit-scrollbar-track
+        background-color: var.$color-light-bg
+
+    *
+        color: var.$color-light-text
+
+    .gapper
+        background: var.$black
+
+    .prop-ring
+        circle
+            stroke: var.$color-light-ring
+
+    .bg-aplha
+        background-color: var.$color-light-ring
+
+    .bg-theme
+        background-color: var.$color-light-bg
+
+    .bg-theme-soft
+        background-color: var.$color-light-ring
+
+    .section-dvd
+        border-top: 1px solid var.$color-light-dvd
+
+    .bg-loading
+        background-color: var.$color-light-loading
+
+    .menu-button
+        .base-circle
+            stroke: var.$color-light-hambd
+
+        .hamburger span
+            background: var.$black
+
+        .close-btn svg path
+            stroke: var.$black
+
+    .modal .close-btn path
+        stroke: var.$black !important
+
+    .heroes-bg-item
+        background: var.$color-light-teambg
+
+    .rotate-text
+        svg path
+            fill: var.$black
+
+    .lds-ellipsis div
+        background: var.$black
+
+    // .menu nav li a
+    //     &::after
+    //            background: var.$black
+
+
+body[data-theme="dark"]
+    background-color: var.$color-dark-bg
+
+    ::-webkit-scrollbar-track
+        background-color: var.$color-dark-bg
+
+    *
+        color: var.$color-dark-text
+
+    .gapper
+        background: var.$white
+
+    .prop-ring
+        circle
+            stroke: var.$color-dark-ring
+
+    .bg-aplha
+        background-color: var.$color-dark-ring
+
+    .bg-theme
+        background-color: var.$color-dark-bg
+
+    .bg-theme-soft
+        background-color: var.$color-dark-ring
+
+    .section-dvd
+        border-top: 1px solid var.$color-dark-dvd
+
+    .bg-loading
+        background-color: var.$color-dark-loading
+
+    .menu-button
+        .base-circle
+            stroke: var.$color-dark-hambd
+
+        .hamburger span
+            background: var.$white
+
+    .modal .close-btn path
+        stroke: var.$white !important
+
+    .heroes-bg-item
+        background: var.$color-dark-teambg
+
+    .rotate-text
+        svg path
+            fill: var.$white
+
+    .lds-ellipsis div
+        background: var.$white
+
+    // .menu nav li a
+    //     &::after
+    //         background: var.$white
+
+@each $name, $color in var.$colors-basic
+    .fc-#{$name}
+        color: $color !important
+    .fc-#{$name}-hover:hover
+        color: $color
+
+    .bg-#{$name}
+        background-color: $color
+    .bg-#{$name}-hover:hover
+        background-color: $color
+
+    .fill-#{$name}
+        fill: $color
+    .fill-#{$name}:hover
+        fill: $color
+
+.bg-base-light
+    background-color: var.$color-light-bg
+
+.bg-base-dark
+    background-color: var.$color-dark-bg
+
+.prop
+    position: absolute
+    z-index: -1
+
+    .prop-ring, .prop-g
+        display: block
+        
+.bg-fix-gradient-primsec
+    background: linear-gradient(115.39deg, var.$color-primary 15.19%, var.$color-secondary 89.21%)
+    position: fixed
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    z-index: 3
+    opacity: 0
+    visibility: hidden
+
+@keyframes rotate-text-keyframes
+    0%
+        transform: rotate(0)
+    100%
+        transform: rotate(360deg)
+
+.rotate-text
+    display: block
+    width: 200px
+    height: 200px
+    
+    img 
+        animation: rotate-text-keyframes 4s linear 0s infinite
+
+.smoothenter__item
+    opacity: 0
+    transform: translateX(-40px)
+
+#cursor
+    position: fixed
+    z-index: 99999
+    left: 0
+    top: 0
+    width: 8px
+    height: 8px
+    pointer-events: none
+    background-color: #fff
+    border-radius: 50%
+    mix-blend-mode: difference
+
+    @include var.media('screen', '<=xs')
+        display: none
+
+    .cursor-circle
+        position: absolute
+        top: 50%
+        left: 50%
+        -webkit-transform: translate(-50%,-50%)
+        transform: translate(-50%,-50%)
+        width: 40px
+        height: 40px
+        background-color: rgba(204,204,204,.3)
+        transition: all .2s ease
+        border-radius: 50%
+        z-index: -5
+
+    &.cursor--bigger-outer
+        .cursor-circle
+            width: 64px
+            height: 64px
+            background-color: rgba(204,204,204,.15)
+
+.navigation-arrow-hover
+    svg
+        .line
+            transition: transform 0.5s cubic-bezier(.4,1.35,.6,1)
+
+        .chevron
+            transition: transform 0.4s cubic-bezier(.4,1.35,.6,1) 0.2s
+
+    &:hover
+        svg
+            .line
+                transform: scaleX(1.15)
+
+            .chevron
+                transform: translateX(8px)
+
+.button-border-hover
+    position: relative
+    // transform-origin: center bottom
+    // transition: transform 0.3s ease !important
+    transition: font-weight .3s ease !important
+
+    &::before
+        content: ''
+        position: absolute
+        width: 0
+        // width: calc(100% + 20px)
+        height: 2px
+        background: var.$color-secondary
+        bottom: -7px
+        left: -10px
+        pointer-events: none
+        transition: all 0.8s cubic-bezier(.4,1.35,.6,1) 
+
+    &::after
+        content: ''
+        position: absolute
+        width: 0
+        height: 2px
+        background: var.$color-primary
+        bottom: -7px
+        left: -10px
+        pointer-events: none
+        transition: all 0.8s cubic-bezier(.4,1.35,.6,1) 0.3s
+
+    &:hover
+        // transform: scale(1.01)
+        font-weight: 600
+
+        &::before
+            width: calc(100% + 20px)
+
+        &::after
+            width: 100%
+            left: 0
+
+.fade-enter-active,
+.fade-leave-active
+    opacity: 1
+    transition: opacity 0.5s ease
+
+.fade-enter-from,
+.fade-leave-to
+    opacity: 0
