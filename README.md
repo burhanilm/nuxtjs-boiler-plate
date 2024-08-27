@@ -1,4 +1,4 @@
-# junglescrap2
+# Nuxt JS 2.15 Boiler Plate
 
 ## Build Setup
 
